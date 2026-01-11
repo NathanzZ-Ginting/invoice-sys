@@ -1,0 +1,11 @@
+go 1.25.4
+
+use (
+	./services/shared
+	./services/api-gateway
+	./services/customer-service
+	./services/invoice-service
+	./services/payment-service
+	./services/analytics-service
+	./services/notification-service
+)

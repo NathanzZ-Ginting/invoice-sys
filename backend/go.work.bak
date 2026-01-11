@@ -1,0 +1,11 @@
+go 1.25.4
+
+use (
+	./services/shared
+	./services/api-gateway/cmd
+	./services/customer-service/cmd
+	./services/invoice-service/cmd
+	./services/payment-service/cmd
+	./services/analytics-service/cmd
+	./services/notification-service/cmd
+)

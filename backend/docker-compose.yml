@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  # API Gateway - Main entry point
+  api-gateway:
+    build:
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - API_GATEWAY_PORT=8080
+      - CUSTOMER_SERVICE_HOST=customer-service
+      - CUSTOMER_SERVICE_PORT=8082
+      - INVOICE_SERVICE_HOST=invoice-service
+      - INVOICE_SERVICE_PORT=8081
+      - PAYMENT_SERVICE_HOST=payment-service
+      - PAYMENT_SERVICE_PORT=8083
+      - ANALYTICS_SERVICE_HOST=analytics-service
+      - ANALYTICS_SERVICE_PORT=8085
+      - NOTIFICATION_SERVICE_HOST=notification-service
+      - NOTIFICATION_SERVICE_PORT=8084
+    depends_on:
+      - customer-service
+      - invoice-service
+      - payment-service
+      - analytics-service
+      - notification-service
+    networks:
+      - invoice-network
+
+  # Customer Service
+  customer-service:
+    build:
+      context: .
+      dockerfile: services/customer-service/Dockerfile
+    ports:
+      - "8082:8082"
+    env_file:
+      - .env
+    environment:
+      - CUSTOMER_SERVICE_PORT=8082
+    networks:
+      - invoice-network
+
+  # Invoice Service
+  invoice-service:
+    build:
+      context: .
+      dockerfile: services/invoice-service/Dockerfile
+    ports:
+      - "8081:8081"
+    env_file:
+      - .env
+    environment:
+      - INVOICE_SERVICE_PORT=8081
+    networks:
+      - invoice-network
+
+  # Payment Service
+  payment-service:
+    build:
+      context: .
+      dockerfile: services/payment-service/Dockerfile
+    ports:
+      - "8083:8083"
+    env_file:
+      - .env
+    environment:
+      - PAYMENT_SERVICE_PORT=8083
+    networks:
+      - invoice-network
+
+  # Analytics Service
+  analytics-service:
+    build:
+      context: .
+      dockerfile: services/analytics-service/Dockerfile
+    ports:
+      - "8085:8085"
+    env_file:
+      - .env
+    environment:
+      - ANALYTICS_SERVICE_PORT=8085
+    networks:
+      - invoice-network
+
+  # Notification Service
+  notification-service:
+    build:
+      context: .
+      dockerfile: services/notification-service/Dockerfile
+    ports:
+      - "8084:8084"
+    env_file:
+      - .env
+    environment:
+      - NOTIFICATION_SERVICE_PORT=8084
+    networks:
+      - invoice-network
+
+networks:
+  invoice-network:
+    driver: bridge
